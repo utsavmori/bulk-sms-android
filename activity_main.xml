@@ -63,5 +63,4 @@
         android:text=""
         android:textColor="@color/Green" />
 
-
 </RelativeLayout>

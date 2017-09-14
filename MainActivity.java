@@ -10,6 +10,7 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     static TextView tv;
     File file;BufferedReader br;
 
+
     String line="";
 
     @Override
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         snd = (Button) findViewById(R.id.send);
         msg = (EditText) findViewById(R.id.editText2);
         tv = (TextView) findViewById(R.id.textView3);
+
+
 
 
         snd.setOnClickListener(new View.OnClickListener() {
@@ -44,9 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        snd.setEnabled(false);
                        sendmsg();
 
-                        dialog.dismiss();
+
                     }
                 });
 
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
                 br = new BufferedReader(new FileReader(file));
         }catch (Exception e) {
-            Toast.makeText(this,"File Not Found",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"File Not Found or Permission Not Given",Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 
@@ -91,19 +97,24 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                         }
                     }
-                    SmsManager smsManager = SmsManager.getDefault();
+                    else{
+                        continue;
+                    }
+                  SmsManager smsManager = SmsManager.getDefault();
                     smsManager.sendTextMessage(line, null,msg.getText().toString(), null, null);
 
+                    Thread.sleep(500);
                 }
+            snd.setEnabled(true);
+            tv.setText("Messages Sent Successfully");
         }catch(Exception e){
-                Toast.makeText(this,"File Not Found or message not send!!!",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"message not send!!!",Toast.LENGTH_LONG).show();
                 return ;
 
              }
-            tv.setText("Messages Sent Successfully");
+
+
 
     }
 
 }
-
-
